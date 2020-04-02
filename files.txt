@@ -4,4 +4,3 @@ E:\remoteloc\local\test2.dgn
 
 #whatup
 E:\remoteloc\local\another_test.dgn
-E:\remoteloc\local\test2 - Copy.dgn
