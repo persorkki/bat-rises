@@ -1,6 +1,7 @@
-D:\Code\wip\bat-rises\test\loc\remote\test.dgn
+E:\remoteloc\local\test.dgn
 #comment
-D:\Code\wip\bat-rises\test\loc\remote\test2.dgn
+E:\remoteloc\local\test2.dgn
 
 #whatup
-D:\Code\wip\bat-rises\test\loc\remote\another_test.dgn
+E:\remoteloc\local\another_test.dgn
+E:\remoteloc\local\test2 - Copy.dgn
