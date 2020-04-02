@@ -1,0 +1,6 @@
+D:\Code\wip\bat-rises\test\loc\remote\test.dgn
+#comment
+D:\Code\wip\bat-rises\test\loc\remote\test2.dgn
+
+#whatup
+D:\Code\wip\bat-rises\test\loc\remote\another_test.dgn
