@@ -3,7 +3,6 @@ import os
 import json
 
 def we_modified(dst, mtime):
-	
 	return False
 
 def _read_logs():

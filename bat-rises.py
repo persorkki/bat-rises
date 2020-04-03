@@ -4,28 +4,29 @@ import json
 import sys
 
 import libtest
+import devs
 import logs
 
-local_loc = os.fspath(r"D:\Code\wip\bat-rises\test\local\DESKTOP")
-remo_rep = os.fspath(r"D:\Code\wip\bat-rises\test\networkdrive")
+remote_working_dir = r"D:\Code\wip\bat-rises\test\networkdrive"
+local_working_dir = r"D:\Code\wip\bat-rises\test\local\DESKTOP"
 
 def read_files_txt():
 	with open("./test/testfiles.txt", "r") as f:
 		lines = [x.strip("\n") for x in f.readlines()]
 	return [x for x in lines if x.strip() and not x.startswith("#")]
 
-def push():
-	for path in read_files_txt():
-		(remote, file) = os.path.split(path)		
-		libtest.do_path(local_loc, remote, file, src_omit = r"D:\Code\wip\bat-rises\test\local\DESKTOP", dst_omit = r"D:\Code\wip\bat-rises\test\networkdrive",is_logged=True)
+#TODO: rename push
+def dev_push():
+	pass
 
-def pull():
+#TODO: rename pull
+def dev_pull():
 	for path in read_files_txt():
-		(remote, file) = os.path.split(path)	
-		libtest.do_path(remote, local_loc, file, dst_omit = r"D:\Code\wip\bat-rises\test\local\DESKTOP", src_omit = r"D:\Code\wip\bat-rises\test\networkdrive", is_logged=False)
+		(relative_path, file) = os.path.split(path)
+		devs.do_path_pull(relative_path, file, remote_working_dir, local_working_dir)
 
 if __name__ == "__main__":
-	options = {"push":push, "pull":pull}
+	options = {"push":dev_push, "pull":dev_pull}
 
 	if not os.path.isfile("logs.json"):
 		logs.create_logs(read_files_txt())
