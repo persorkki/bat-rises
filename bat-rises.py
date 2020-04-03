@@ -3,8 +3,8 @@ import os
 import json
 from shutil import copy
 
-local_loc = os.fspath(r"D:\Code\wip\bat-rises\test\loc\local")
-remo_rep = os.fspath(r"E:\remoteloc\local")
+local_loc = os.fspath(r"D:\Code\wip\bat-rises\test\local\DESKTOP")
+remo_rep = os.fspath(r"D:\Code\wip\bat-rises\test\networkdrive")
 
 def read_logs():
 	with open("logs.json", "r") as f:
@@ -15,6 +15,7 @@ def set_log(dst, dst_modified):
 	with open("logs.json", "w") as f:
 		logs[dst] = dst_modified
 		json.dump(logs, f)
+		
 def temp_log_setter():
 	with open("testfiles.txt", "r") as f:
 		lines = [x.strip("\n") for x in f.readlines()]
@@ -31,7 +32,7 @@ def con_copy_text(src, dst):
 	print (f"{dst}")
 
 def main():
-	with open("testfiles.txt", "r") as f:
+	with open("./test/testfiles.txt", "r") as f:
 		lines = [x.strip("\n") for x in f.readlines()]
 		
 	for path in [x for x in lines if x.strip() and not x.startswith("#")]:

@@ -1,4 +1,0 @@
-#testfiles.txt
-E:\remoteloc\local\test.dgn
-E:\remoteloc\local\test2.dgn
-E:\remoteloc\local\another_test.dgn
