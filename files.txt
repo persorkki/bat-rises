@@ -1,6 +1,6 @@
-E:\remoteloc\local\test.dgn
+\\networkdrive01\Project\Design\Final\plan.dgn
 #comment
-E:\remoteloc\local\test2.dgn
+\\networkdrive01\Project\Design\Final\plan2_1.dgn
 
 #whatup
-E:\remoteloc\local\another_test.dgn
+\\networkdrive01\Project\Data\reference1.dgn
