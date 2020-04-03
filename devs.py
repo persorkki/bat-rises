@@ -52,21 +52,27 @@ def do_path_push(relative_path, file, src_working_dir, dst_working_dir):
     # step-by-step for this mess:
     if os.path.isfile(src_full_path):
         # if source is a real file
-        if os.path.isfile(dst_full_path) and is_newer(src_full_path, dst_full_path):
-            # if destination exists and source is newer 
-            # we cant check if its newer if it doesnt exist
-            if logs.is_in_logs(dst_full_path) and logs.we_modified(dst_full_path, os.path.getmtime(dst_full_path)):
-                # has it been modified before and did we modify it last?
-                do_copy_op(src_full_path, dst_full_path, dst_path_no_file, True)
-            elif logs.is_in_logs(dst_full_path):
-                # we didnt modify it last but its in the logs
-                print (f"[ LOG ]  file was not last modified by this program {dst_full_path}")
+        if os.path.isfile(dst_full_path):
+            if is_newer(src_full_path, dst_full_path):
+                # if destination exists and source is newer 
+                # we cant check if its newer if it doesnt exist
+                if logs.is_in_logs(dst_full_path) and logs.we_modified(dst_full_path, os.path.getmtime(dst_full_path)):
+                    # has it been modified before and did we modify it last?
+                    do_copy_op(src_full_path, dst_full_path, dst_path_no_file, True)
+                    print (f"[ LOG ]  file was last modified by us! copying {dst_full_path}")
+
+                elif logs.is_in_logs(dst_full_path):
+                    # we didnt modify it last but its in the logs
+                    print (f"[ LOG ]  file was not last modified by this program {dst_full_path}")
+                else:
+                    # file exists in destination but it isnt logged, do nothing
+                    print (f"[ LOG ]  file exists but is not logged, not copying {dst_full_path}")
             else:
-                # file exists in destination but it isnt logged, do nothing
-                print (f"[ LOG ] file exists but is not logged, not copying {dst_full_path}")
+                print (f"[ LOG ]  destination is newer than source, not copying {src_full_path}")
         # if destination doesnt exist (and therefore cant be newer)
         # copy!
         else:
+            print ("huh")
             do_copy_op(src_full_path, dst_full_path, dst_path_no_file, True)
     else:
         # source doesnt exist
