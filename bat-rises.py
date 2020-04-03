@@ -40,6 +40,7 @@ def main():
 		local_= remote.replace(remo_rep, local_loc)
 
 		do_copy(os.path.join(local_, file), os.path.join(remote, file), True)
+		do_copy(os.path.join(remote, file), os.path.join(local_, file), False)
 
 def do_copy(src, dst, is_check):
 	if is_check and os.path.isfile(src):
