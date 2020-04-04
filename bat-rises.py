@@ -22,12 +22,14 @@ def pull(loglist, local_working_dir, remote_working_dir):
 
 if __name__ == "__main__":
     options = {"push":push, "pull":pull, "clogs": logs.create_logs}
-    (remote_root, local_root, filelist) = conf.get_configs("default") 
+    (remote_root, local_root, filelist) = get_configs("default") 
     #TODO: add profiles
 
     #if logs dont exist, make them
     if not os.path.isfile("logs.json"):
-        logs.create_logs()
+        logs.create_logs(loglist = read_files_txt(filelist), 
+                         local_working_dir=local_root,
+                         remote_working_dir=remote_root)
 
     #cmdline arguments
     if len(sys.argv) > 1 and sys.argv[1].lower() in options:
