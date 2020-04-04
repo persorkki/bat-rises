@@ -21,13 +21,16 @@ def do_path_pull(relative_path, file, src_working_dir, dst_working_dir):
         if os.path.isfile(dst_full_path):
 
             if is_newer(src_full_path, dst_full_path):
+                print (f"[ LOG ]  SRC is newer than DST, pulling")
                 do_copy_op(src_full_path, dst_full_path, dst_path_no_file, False)
             else:
-                print (f"[ LOG ]  DST is not newer than SRC, not pulling")
+                print (f"[ LOG ]  SRC is not newer than DST, not pulling")
         else:
+            #if file doesnt exist, lets pull
+            print (f"[ LOG ]  DST does not exist, pulling")
             do_copy_op(src_full_path, dst_full_path, dst_path_no_file, False)
     else:
-        print (f"{src_full_path} no such file!")
+        print (f"[ LOG ]  SRC does not exist, not pulling")
 
 def display_src_dst(src, dst):
     print (f"[ SRC ]  {src}")
@@ -77,7 +80,7 @@ def do_path_push(relative_path, file, src_working_dir, dst_working_dir):
                 # file exists in destination but it isnt logged, do nothing
                     print (f"[ LOG ]  DST exists but is not logged, not pushing")
             else:
-                print (f"[ LOG ]  DST is newer than SRC, not pushing")
+                print (f"[ LOG ]  DST last modified date is newer or same than SRC, not pushing")
         # if destination doesnt exist (and therefore cant be newer)
         # copy!
         else:

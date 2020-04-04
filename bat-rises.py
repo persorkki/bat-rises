@@ -13,12 +13,12 @@ def read_files_txt(filelist):
 def push(loglist, local_working_dir, remote_working_dir):
     for path in loglist:
         (relative_path, file) = os.path.split(path)
-        devs.do_path_push(relative_path, file, local_working_dir, remote_working_dir)
+        do_path_push(relative_path, file, local_working_dir, remote_working_dir)
 
 def pull(loglist, local_working_dir, remote_working_dir):
     for path in loglist:
         (relative_path, file) = os.path.split(path)
-        devs.do_path_pull(relative_path, file, remote_working_dir, local_working_dir)
+        do_path_pull(relative_path, file, remote_working_dir, local_working_dir)
 
 if __name__ == "__main__":
     options = {"push":push, "pull":pull, "clogs": logs.create_logs}
