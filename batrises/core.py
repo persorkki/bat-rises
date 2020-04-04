@@ -63,8 +63,6 @@ def do_path_push(relative_path, file, src_working_dir, dst_working_dir):
         if os.path.isfile(dst_full_path):
             
             if is_newer(src_full_path, dst_full_path):
-                print (f"{os.path.getmtime(src_full_path)}")
-                print (f"{os.path.getmtime(dst_full_path)}")
                 print (f"[ LOG ]  SRC is newer than DST")
             # if destination exists and source is newer 
             # we cant check if its newer if it doesnt exist

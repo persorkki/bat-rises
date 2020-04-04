@@ -1,6 +1,4 @@
-\\networkdrive01\Project\Design\Final\plan.dgn
-#comment
-\\networkdrive01\Project\Design\Final\plan2_1.dgn
-
-#whatup
-\\networkdrive01\Project\Data\reference1.dgn
+project\test.dgn
+project\test2.dgn
+project\another_test.dgn
+project\deeper\deep.dgn
