@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import os
 import shutil
-
-import logs
+from . import logs
 
 def check_dir_tree(dst_full_path):
     """checks if the directory exists 
@@ -61,11 +60,14 @@ def do_path_push(relative_path, file, src_working_dir, dst_working_dir):
         if os.path.isfile(dst_full_path):
             
             if is_newer(src_full_path, dst_full_path):
+                print (f"{os.path.getmtime(src_full_path)}")
+                print (f"{os.path.getmtime(dst_full_path)}")
+                print (f"[ LOG ]  SRC is newer than DST")
             # if destination exists and source is newer 
             # we cant check if its newer if it doesnt exist
                 if logs.is_in_logs(dst_full_path) and logs.we_modified(dst_full_path, os.path.getmtime(dst_full_path)):
                 # has it been modified before and did we modify it last?
-                    print (f"[ LOG ]  file was last modified by us, pushing")
+                    print (f"[ LOG ]  DST was last modified by us, pushing")
                     do_copy_op(src_full_path, dst_full_path, dst_path_no_file, True)
 
                 elif logs.is_in_logs(dst_full_path) and not logs.we_modified(dst_full_path, os.path.getmtime(dst_full_path)):

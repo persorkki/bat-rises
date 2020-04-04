@@ -5,10 +5,13 @@ import sys
 
 # TODO: change module names
 # TODO: also dev_push, dev_pull
+from batrises import *
 
+"""
 import devs
 import logs
 import conf
+"""
 
 # TODO: make this configurable
 remote_working_dir = r"D:\Code\wip\bat-rises\test\networkdrive"
