@@ -21,6 +21,7 @@ def pull(loglist, local_working_dir, remote_working_dir):
         do_path_pull(relative_path, file, remote_working_dir, local_working_dir)
 
 if __name__ == "__main__":
+    os.chdir( os.path.dirname(__file__) )
     options = {"push":push, "pull":pull, "clogs": logs.create_logs}
     (remote_root, local_root, filelist) = get_configs("default") 
     #TODO: add profiles
@@ -36,4 +37,13 @@ if __name__ == "__main__":
         options[sys.argv[1].lower()](loglist = read_files_txt(filelist), 
                                      local_working_dir=local_root,
                                      remote_working_dir=remote_root)
+    elif len(sys.argv) == 1:
+        push(loglist = read_files_txt(filelist), 
+             local_working_dir=local_root,
+             remote_working_dir=remote_root)
+
+        pull(loglist = read_files_txt(filelist), 
+             local_working_dir=local_root,
+             remote_working_dir=remote_root)
     
+    input("press Enter to close this window...")
