@@ -38,7 +38,7 @@ def display_src_dst(src, dst):
 
 def do_copy_op(src_full_path, dst_full_path, dst_path_no_file, is_Logged):
     check_dir_tree(dst_path_no_file)
-    shutil.copy(src_full_path, dst_path_no_file)
+    shutil.copy2(src_full_path, dst_path_no_file)
     if is_Logged:
         print ("[ LOG ]  copy event was logged ")
         logs.change_log(dst_full_path, os.path.getmtime(dst_full_path))
