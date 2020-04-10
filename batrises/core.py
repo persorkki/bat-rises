@@ -43,7 +43,6 @@ def do_copy_op(src_full_path, dst_full_path, dst_path_no_file, is_Logged):
         print ("[ LOG ]  copy event was logged ")
         logs.change_log(dst_full_path, os.path.getmtime(dst_full_path))
 
-
 def is_newer(a, b):
     return True if os.path.getmtime(a) > os.path.getmtime(b) else False
 
@@ -78,6 +77,7 @@ def do_path_push(relative_path, file, src_working_dir, dst_working_dir):
                 elif logs.is_in_logs(dst_full_path) and not logs.we_modified(dst_full_path, os.path.getmtime(dst_full_path)):
                 # we didnt modify it last but its in the logs
                     #print (f"[ LOG ]  DST was not last modified by this program")
+
                     while(True):
                         print ("DST was not modified by this program, how do you wish to proceed?")
                         print ("1. Copy SRC to DST anyway, overwriting the DST file")

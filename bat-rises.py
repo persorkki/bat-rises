@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import os
-import json
 import sys
 
 from batrises import *
@@ -22,7 +21,7 @@ def pull(loglist, local_working_dir, remote_working_dir):
 
 if __name__ == "__main__":
     os.chdir( os.path.dirname(__file__) )
-    options = {"push":push, "pull":pull, "clogs": logs.create_logs}
+    options = {"push":push, "pull":pull, "clogs": logs.create_logs, "test": test.send}
     (remote_root, local_root, filelist) = get_configs("default") 
     #TODO: add profiles
 
