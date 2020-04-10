@@ -2,17 +2,20 @@
 import os
 import shutil
 import colorama
+from pathlib import Path
 
 from .rcodes import *
 from .utils import *
 from . import logs
 	
+#TODO: use pathlib instead
+
 def do_copy(src, dst, isLogged):
 	check_dir_tree(dst)
-	shutil.copy2(src, dst)
-
+	#print (dst.parent)
+	shutil.copy2(src, dst.parent)
 	if isLogged:
-		logs.change_log(dst, os.path.getmtime(dst))
+		logs.change_log(str(dst), os.path.getmtime(dst))
 	
 def question_override(src, dst):
 	print (f"\n{colorama.Fore.RED}OVERRIDE QUESTION ")
@@ -34,7 +37,7 @@ def question_override(src, dst):
 def send(loc, rem):
 	"""send loc to rem"""
 	# does the local file exist
-	if not os.path.isfile(loc):
+	if not loc.exists:
 		return ReturnCode.NO_SOURCE
 
 	# does the remote file exist
