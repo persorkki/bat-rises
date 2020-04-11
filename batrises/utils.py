@@ -5,7 +5,8 @@ def check_dir_tree(dst):
     """checks if the directory exists 
        and makes it if it doesnt"""
     if not dst.exists():
-        os.makedirs(dst.parent)
+        dst.mkdir(parents=True)
+        
 
 def is_older_than(src, dst):
-	return True if os.path.getmtime(src) < os.path.getmtime(dst) else False
+    return True if src.stat().st_mtime < dst.stat().st_mtime else False

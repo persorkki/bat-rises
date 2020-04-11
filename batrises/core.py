@@ -11,7 +11,7 @@ from . import logs
 #TODO: use pathlib instead
 
 def do_copy(src, dst, isLogged):
-	check_dir_tree(dst)
+	check_dir_tree(dst.parent)
 	#print (dst.parent)
 	shutil.copy2(src, dst.parent)
 	if isLogged:
@@ -20,7 +20,7 @@ def do_copy(src, dst, isLogged):
 def question_override(src, dst):
 	print (f"\n{colorama.Fore.RED}OVERRIDE QUESTION ")
 	print (f"file is not in logs or it was not modified by us")
-	print (f"override {colorama.Fore.BLUE}{colorama.Back.WHITE}DST{colorama.Style.RESET_ALL} with {colorama.Fore.WHITE}{colorama.Back.BLUE}SRC{colorama.Style.RESET_ALL}?")
+	print (f"proceed copying {colorama.Fore.BLUE}{colorama.Back.WHITE}SRC{colorama.Style.RESET_ALL} to {colorama.Fore.WHITE}{colorama.Back.BLUE}DST{colorama.Style.RESET_ALL}?")
 	
 	print (f"src:	{colorama.Fore.WHITE}{colorama.Back.BLUE}{src}")
 	print (f"dst:	{colorama.Fore.BLUE}{colorama.Back.WHITE}{dst}")
@@ -37,23 +37,23 @@ def question_override(src, dst):
 def send(loc, rem):
 	"""send loc to rem"""
 	# does the local file exist
-	if not loc.exists:
+	if not loc.exists():
 		return ReturnCode.NO_SOURCE
 
 	# does the remote file exist
 	# if it doesnt, copy loc to rem
-	if not os.path.isfile(rem):
+	if not rem.exists():
 		do_copy(loc, rem, True)
 		return ReturnCode.SUCCESS
 
-	# is the remote file older than local
+	# is the remote file newer than local
 	if not is_older_than(rem, loc):
 		return ReturnCode.NOT_OLDER
 
 	# is the remote file in logs
 	# was the remote file last modified by us
 	# if it wasnt, copy loc to rem
-	if logs.is_in_logs(rem) and logs.we_modified(rem, os.path.getmtime(rem)):
+	if logs.is_in_logs(rem) and logs.we_modified(rem, rem.stat().st_mtime):
 		do_copy(loc, rem, True)
 		return ReturnCode.SUCCESS
 
@@ -68,8 +68,7 @@ def send(loc, rem):
 def download(loc, rem):
 	"""download rem to loc"""
 	# does the remote file exist
-	if not os.path.isfile(rem):
-		print (rem)
+	if not rem.exists():
 		return ReturnCode.NO_SOURCE
 
 	# does the local file exist
