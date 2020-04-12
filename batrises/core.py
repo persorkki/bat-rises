@@ -22,8 +22,8 @@ def question_override(src, dst):
 	print (f"file is not in logs or it was not modified by us")
 	print (f"proceed copying {colorama.Fore.BLUE}{colorama.Back.WHITE}SRC{colorama.Style.RESET_ALL} to {colorama.Fore.WHITE}{colorama.Back.BLUE}DST{colorama.Style.RESET_ALL}?")
 	
-	print (f"src:	{colorama.Fore.WHITE}{colorama.Back.BLUE}{src}")
-	print (f"dst:	{colorama.Fore.BLUE}{colorama.Back.WHITE}{dst}")
+	print (f"SRC:	{colorama.Fore.BLUE}{colorama.Back.WHITE}{src}{colorama.Style.RESET_ALL}")
+	print (f"DST:	{colorama.Fore.WHITE}{colorama.Back.BLUE}{dst}{colorama.Style.RESET_ALL}")
 	
 	while (True):
 		print ("1. Yes, override")
