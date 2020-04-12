@@ -32,6 +32,7 @@ def download_and_send(remote_root, local_root, filelist):
     
 
 if __name__ == "__main__":
+    
     options = {"both":download_and_send,
                "make":logs.create_logs,
                }
@@ -42,7 +43,9 @@ if __name__ == "__main__":
         logs.create_logs(loglist = read_files_txt(filelist), 
                          local_working_dir=local_root,
                          remote_working_dir=remote_root)
+
     if len(sys.argv) > 1 and sys.argv[1] in options:
+        outs.clear(os.name)
         options[sys.argv[1]]( remote_root, local_root, read_files_txt(filelist) )
     
     #download_and_send(remote_root, local_root, read_files_txt(filelist) )
