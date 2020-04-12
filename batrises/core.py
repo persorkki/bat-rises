@@ -12,12 +12,16 @@ from . import outs
 
 def do_copy(src, dst, isLogged):
     check_dir_tree(dst.parent)
-    #print (dst.parent)
-    shutil.copy2(src, dst.parent)
-    if isLogged:
-        #TODO: why parse dst here and why do it twice
-        #TODO: or is it better to keep logs more modular
-        logs.change_log(str(dst), os.path.getmtime(dst))
+    try:
+        shutil.copy2(src, dst.parent)
+        if isLogged:
+            #TODO: why parse dst here and why do it twice
+            #TODO: or is it better to keep logs more modular
+            logs.change_log(str(dst), os.path.getmtime(dst))
+        return ReturnCode.SUCCESS
+       
+    except PermissionError:
+        return ReturnCode.FILE_IN_USE
 
 def send(loc, rem):
     """send loc to rem"""
@@ -28,8 +32,7 @@ def send(loc, rem):
     # does the remote file exist
     # if it doesnt, copy loc to rem
     if not rem.exists():
-        do_copy(loc, rem, True)
-        return ReturnCode.SUCCESS
+        return do_copy(loc, rem, True)
 
     # is the remote file newer than local
     if not is_older_than(rem, loc):
@@ -39,14 +42,12 @@ def send(loc, rem):
     # was the remote file last modified by us
     # if it wasnt, copy loc to rem
     if logs.is_in_logs(rem) and logs.we_modified(rem, rem.stat().st_mtime):
-        do_copy(loc, rem, True)
-        return ReturnCode.SUCCESS
+        return do_copy(loc, rem, True)
 
     # if it wasnt, ask the user how to proceed
     else:
         if outs.question_override(loc, rem):
-            do_copy(loc, rem, True)
-            return ReturnCode.SUCCESS
+            return do_copy(loc, rem, True)
         else:
             return ReturnCode.USER_CANCEL
 
@@ -59,15 +60,13 @@ def download(loc, rem):
     # does the local file exist
     # if it doesnt, copy rem to loc, isLogged = False
     if not loc.is_file():
-        do_copy(rem, loc, False)
-        return ReturnCode.SUCCESS
+        return do_copy(rem, loc, False)
 
     # is the local file older than remote
     if not is_older_than(loc, rem):
         return ReturnCode.NOT_OLDER
 
     if outs.question_override(rem, loc):
-        do_copy(rem, loc, False)
-        return ReturnCode.SUCCESS
+        return do_copy(rem, loc, False)
     else:
         return ReturnCode.USER_CANCEL
