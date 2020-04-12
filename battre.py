@@ -11,12 +11,25 @@ def read_files_txt(filelist):
     return [x for x in lines if x.strip() and not x.startswith("#")]
 
 def download_and_send(remote_root, local_root, filelist):
+    oper_log = []
     for f in filelist:
-        l = Path(f.replace(remote_root, local_root))
-        f = Path(f)
-        
-        outs.out(l, f, core.send(l, f).get_val())
-        outs.out(l, f, core.download(l, f).get_val())
+        loc = Path(f.replace(remote_root, local_root))
+        rem = Path(f)
+
+        op_send =      {  "local" : loc,
+                          "remote" : rem,
+                          "operation" : "-> send",
+                          "result" : outs.out(loc, "-> send", core.send(loc, rem).get_val()), }
+
+        op_download =  {  "local" : loc,
+                          "remote" : rem,
+                          "operation" : "<- download",
+                          "result" : outs.out(loc, "<- download", core.download(loc, rem).get_val()), }
+
+        oper_log.append(op_send)
+        oper_log.append(op_download)
+    outs.endlog(oper_log)
+    
 
 if __name__ == "__main__":
     options = {"both":download_and_send,

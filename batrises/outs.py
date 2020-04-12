@@ -1,10 +1,22 @@
 from colorama import Fore, Back, Style, init
+from .rcodes import *
 
 init(autoreset=True)
 
-def out(l, f, v):
-    print (f"{Fore.BLUE}-> send {l} {v}")
-    print (f"{Fore.GREEN}<- download {f} {v}\n")
+clr = { "<- download" : Fore.GREEN,
+        "-> send"     : Fore.BLUE, }
+def endlog(endlog):
+    downloads, sends = 0, 0
+    for x in endlog:
+        if x['operation'] == '<- download' and x['result'] == ReturnCode.SUCCESS: downloads += 1
+        if x['operation'] == '-> send'and x['result'] == ReturnCode.SUCCESS: sends += 1
+    print ("Successful send operations ", sends)
+    print ("Successful download operations ", downloads, "\n")
+
+def out(op_file, operation, result):
+    
+    print (f"{clr[operation]}{operation} {op_file} {result}")
+    #print (f"{Fore.GREEN}<- download {f} {v}\n")
 
 def question_override(src, dst):
     print (f"\n{Fore.RED}OVERRIDE QUESTION ")
