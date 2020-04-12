@@ -1,4 +1,5 @@
-D:\Code\wip\bat-rises\test\networkdrive\project\deeper\deeptestings.dgn
+\\DESKTOP-EVVK3FT\project\deeper\deeptestings.dgn
 #heh
-D:\Code\wip\bat-rises\test\networkdrive\project\test.dgn
+\\DESKTOP-EVVK3FT\project\test.dgn
+\\DESKTOP-EVVK3FT\project\hehe.mkv
 #tgest
