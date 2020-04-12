@@ -1,90 +1,72 @@
-#!/usr/bin/env python3
 import os
 import shutil
+import colorama
+from pathlib import Path
+
+from .rcodes import *
+from .utils import *
 from . import logs
-
-def check_dir_tree(dst_full_path):
-    """checks if the directory exists 
-       and makes it if it doesnt"""
-
-    if not os.path.isdir(dst_full_path):
-        print (f"[ LOG ]  destination directory path does not exist.")
-        print (f"[ LOG ]  creating path {dst_full_path}")
-        os.makedirs(dst_full_path)
-
-def do_path_pull(relative_path, file, src_working_dir, dst_working_dir):
-    ( src_full_path, dst_full_path, dst_path_no_file ) = get_paths(relative_path, file, src_working_dir, dst_working_dir)
-    print (f"\n== PULL == ")
-    display_src_dst(src_full_path, dst_full_path)
-    if os.path.isfile(src_full_path):
-    #if source is a file
-        if os.path.isfile(dst_full_path):
-
-            if is_newer(src_full_path, dst_full_path):
-                print (f"[ LOG ]  SRC is newer than DST, pulling")
-                do_copy_op(src_full_path, dst_full_path, dst_path_no_file, False)
-            else:
-                print (f"[ LOG ]  SRC is not newer than DST, not pulling")
-        else:
-            #if file doesnt exist, lets pull
-            print (f"[ LOG ]  DST does not exist, pulling")
-            do_copy_op(src_full_path, dst_full_path, dst_path_no_file, False)
-    else:
-        print (f"[ LOG ]  SRC does not exist, not pulling")
-
-def display_src_dst(src, dst):
-    print (f"[ SRC ]  {src}")
-    print (f"[ DST ]  {dst}")
-
-def do_copy_op(src_full_path, dst_full_path, dst_path_no_file, is_Logged):
-    check_dir_tree(dst_path_no_file)
-    shutil.copy2(src_full_path, dst_path_no_file)
-    if is_Logged:
-        print ("[ LOG ]  copy event was logged ")
-        logs.change_log(dst_full_path, os.path.getmtime(dst_full_path))
-
-
-def is_newer(a, b):
-    return True if os.path.getmtime(a) > os.path.getmtime(b) else False
-
-def get_paths(r, f, s, d):
-    #TODO: lol
-    return (os.path.join(s, r, f), os.path.join(d, r, f), os.path.join(d, r))
-
-def do_path_push(relative_path, file, src_working_dir, dst_working_dir):
-    ( src_full_path, dst_full_path, dst_path_no_file ) = get_paths(relative_path, file, src_working_dir, dst_working_dir)
+from . import outs
     
-    # TODO: TRY-CATCH for file checks?
-    # step-by-step for this mess:
-    print (f"\n== PUSH == ")
-    display_src_dst(src_full_path, dst_full_path)
-    if os.path.isfile(src_full_path):
-    # if source is a real file
-        if os.path.isfile(dst_full_path):
-            
-            if is_newer(src_full_path, dst_full_path):
-                print (f"[ LOG ]  SRC is newer than DST")
-            # if destination exists and source is newer 
-            # we cant check if its newer if it doesnt exist
-                if logs.is_in_logs(dst_full_path) and logs.we_modified(dst_full_path, os.path.getmtime(dst_full_path)):
-                # has it been modified before and did we modify it last?
-                    print (f"[ LOG ]  DST was last modified by us, pushing")
-                    do_copy_op(src_full_path, dst_full_path, dst_path_no_file, True)
+#TODO: use pathlib instead
 
-                elif logs.is_in_logs(dst_full_path) and not logs.we_modified(dst_full_path, os.path.getmtime(dst_full_path)):
-                # we didnt modify it last but its in the logs
-                    print (f"[ LOG ]  DST was not last modified by this program")
-                else:
-                # file exists in destination but it isnt logged, do nothing
-                    print (f"[ LOG ]  DST exists but is not logged, not pushing")
-            else:
-                print (f"[ LOG ]  DST last modified date is newer or same than SRC, not pushing")
-        # if destination doesnt exist (and therefore cant be newer)
-        # copy!
-        else:
-            print ("huh")
-            do_copy_op(src_full_path, dst_full_path, dst_path_no_file, True)
+def do_copy(src, dst, isLogged):
+    check_dir_tree(dst.parent)
+    try:
+        shutil.copy2(src, dst.parent)
+        if isLogged:
+            #TODO: why parse dst here and why do it twice
+            #TODO: or is it better to keep logs more modular
+            logs.change_log(str(dst), os.path.getmtime(dst))
+        return ReturnCode.SUCCESS
+       
+    except PermissionError:
+        return ReturnCode.FILE_IN_USE
+
+def send(loc, rem):
+    """send loc to rem"""
+    # does the local file exist
+    if not loc.exists():
+        return ReturnCode.NO_SOURCE
+
+    # does the remote file exist
+    # if it doesnt, copy loc to rem
+    if not rem.exists():
+        return do_copy(loc, rem, True)
+
+    # is the remote file newer than local
+    if not is_older_than(rem, loc):
+        return ReturnCode.NOT_OLDER
+
+    # is the remote file in logs
+    # was the remote file last modified by us
+    # if it wasnt, copy loc to rem
+    if logs.is_in_logs(rem) and logs.we_modified(rem, rem.stat().st_mtime):
+        return do_copy(loc, rem, True)
+
+    # if it wasnt, ask the user how to proceed
     else:
-        # source doesnt exist
-        print (f"{src_full_path} no such file!")
-            
+        if outs.question_override(loc, rem):
+            return do_copy(loc, rem, True)
+        else:
+            return ReturnCode.USER_CANCEL
+
+def download(loc, rem):
+    """download rem to loc"""
+    # does the remote file exist
+    if not rem.exists():
+        return ReturnCode.NO_SOURCE
+
+    # does the local file exist
+    # if it doesnt, copy rem to loc, isLogged = False
+    if not loc.is_file():
+        return do_copy(rem, loc, False)
+
+    # is the local file older than remote
+    if not is_older_than(loc, rem):
+        return ReturnCode.NOT_OLDER
+
+    if outs.question_override(rem, loc):
+        return do_copy(rem, loc, False)
+    else:
+        return ReturnCode.USER_CANCEL

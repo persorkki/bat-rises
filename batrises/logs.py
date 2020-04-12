@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import os
 import json
 
@@ -19,7 +18,7 @@ def change_log(dst, mtime):
     with open('logs.json', 'w') as f:
         json.dump(dump, f)
 
-def create_logs(loglist, local_working_dir, remote_working_dir):
+def create_logs(remote_working_dir, local_working_dir, loglist):
     dump = dict()
     for log in loglist:
         log = os.path.join(remote_working_dir, log)
