@@ -1,5 +1,5 @@
 from enum import Enum
-import colorama
+from colorama import Fore, Back, Style
 
 class ReturnCode(Enum):
 	SUCCESS     = f"{colorama.Fore.GREEN}File was copied successfully!"
