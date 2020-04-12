@@ -30,7 +30,6 @@ def download_and_send(remote_root, local_root, filelist):
         oper_log.append(op_download)
     outs.endlog(oper_log)
     
-
 if __name__ == "__main__":
     
     options = {"both":download_and_send,
