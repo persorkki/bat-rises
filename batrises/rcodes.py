@@ -3,12 +3,12 @@ from colorama import Fore, Back, Style
 
 class ReturnCode(Enum):
 	#TODO: rework these
-	SUCCESS     = f"{Fore.GREEN}File was copied successfully!"
+	SUCCESS     = f"{Fore.CYAN}SUCCESS"
 	#what error is this lol
-	FAIL 	    = "fail"
-	NO_SOURCE   = "source file doesnt exist"
-	NOT_OLDER   = f"{Fore.YELLOW}No action because destination is newer"
-	USER_CANCEL = f"{Fore.RED}Action was canceled by the user"
-	FILE_IN_USE = f"{Fore.RED}File is in use!"
+	FAIL 	    = f"{Fore.RED}FAIL"
+	NO_SOURCE   = f"{Fore.RED}NO SOURCE"
+	NOT_OLDER   = f"{Fore.YELLOW}NO ACTION"
+	USER_CANCEL = f"{Fore.RED}CANCEL"
+	FILE_IN_USE = f"{Fore.RED}IN USE"
 	def get_val(self):
 		return self.value

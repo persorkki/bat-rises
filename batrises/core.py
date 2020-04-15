@@ -13,11 +13,11 @@ from . import outs
 def do_copy(src, dst, isLogged):
     check_dir_tree(dst.parent)
     try:
-        shutil.copy2(src, dst.parent)
+        shutil.copy2(src, dst)
         if isLogged:
             #TODO: why parse dst here and why do it twice
-            #TODO: or is it better to keep logs more modular
-            logs.change_log(str(dst), os.path.getmtime(dst))
+            
+            logs.change_log(dst, dst.stat().st_mtime)
         return ReturnCode.SUCCESS
        
     except PermissionError:
